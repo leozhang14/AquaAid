@@ -19,12 +19,12 @@ parser.add_argument('--camera', help='Camera divide number.', type=int, default=
 args = parser.parse_args()
 face_cascade_name = args.face_cascade
 face_cascade = cv.CascadeClassifier()
-#-- 1. Load the cascades
+#-- 1. Loading cascades
 if not face_cascade.load(cv.samples.findFile(cv.data.haarcascades + 'haarcascade_frontalface_default.xml')):
     print('--(!)Error loading face cascade')
     exit(0)
 camera_device = args.camera
-#-- 2. Read the video stream
+#-- 2. Read webcam stream
 cap = cv.VideoCapture(camera_device)
 if not cap.isOpened:
     print('--(!)Error opening video capture')
