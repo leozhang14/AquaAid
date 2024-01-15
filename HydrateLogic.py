@@ -7,6 +7,8 @@ import time
     #else:
         #start_time = time.time()
 
+# Refactor functions and reorganize for more efficient processing
+
 import cv2 as cv
 import datetime
 # from AquaAid import identifyShow
@@ -37,6 +39,19 @@ def hydrate_logic(time_opened):
     # Example: return the length of the timestamp string - to be refactored
     return len(time_opened)
 
+def enterFrame():
+    while True:
+        # Capture video frame-by-frame
+        ret, frame = cap.read()
+
+        # Display the frame and prompt user to select ROI
+        cv.imshow('Choose frame (press Enter)', frame)
+
+        # Break the loop when 'Enter' key is pressed
+        if cv.waitKey(1) == 13:
+            break
+        ### *** Make it reset to initial frame selection
+
 # Create a VideoCapture object (0 for webcam)
 cap = cv.VideoCapture(0)
 
@@ -56,12 +71,17 @@ cv.destroyAllWindows()
 roi_coords = cv.selectROI(frame)
 a, b, c, d = map(int, roi_coords)
 
+if cv.waitKey(1) == ord("c"):
+    enterFrame()
 # Define the color to detect (in BGR format)
 color_to_detect = (255, 0, 0)
 
 # Initialize variables
 time_color_detected = None
 running_total = 0
+# Time duration to volume conversion factor (seconds to milliliters, for example)
+timeToVol = 0.1
+# Currently placeholder
 
 # Main loop for color detection
 while True:
@@ -82,7 +102,10 @@ while True:
     # Perform additional logic when the color is first detected
     if time_color_detected:
         value_to_add = hydrate_logic(time_color_detected)
-        running_total += int(value_to_add)
+        if cv.waitKey(1) & 0xFF == ord('s'):
+            #edit so that it records interval pressed down
+            running_total += int(value_to_add) * timeToVol
+            print(f"Running Total: {running_total}")
         time_color_detected = None  # Reset to None to avoid repeated triggering
 
     # Break the loop when 'esc' key is pressed
