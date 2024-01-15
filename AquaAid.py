@@ -8,8 +8,8 @@ def identifyShow(frame):
     faces = faceCascade.detectMultiScale(frameSet)
     for (a,b,c,d) in faces:
         # building the border of the face (detected)
-        center = (a + c//2, b + d//2)
-        frame = cv.ellipse(frame, center, (c//2, d//2), 0, 0, 360, (255, 100, 50), 4)
+        centre = (a + c//2, b + d//2)
+        frame = cv.ellipse(frame, centre, (c//2, d//2), 0, 0, 360, (255, 100, 50), 4)
     cv.imshow('Webcam - AquaAid - Press Esc to Quit', frame)
     # webcam caption
 
@@ -33,16 +33,16 @@ vidCapture = cv.VideoCapture(cameraIdx)
 if not vidCapture.isOpened:
     exit(0)
 while True:
-    foo, frame = vidCapture.read()
+    foo, display = vidCapture.read()
     # where foo is string
-    if frame is None:
+    if display is None:
         break
     #isDrinking = True
     #if isDrinking == True:
         #print("--- %s seconds ---" % round((time.time() - start_time), 3))
     #else:
         #start_time = time.time()
-    identifyShow(frame)
+    identifyShow(display)
     stopCheck = cv.waitKey(10) & 0xff
     if stopCheck == 27:
         break

@@ -45,7 +45,7 @@ while True:
     ret, frame = cap.read()
 
     # Display the frame and prompt user to select ROI
-    cv.imshow('Select ROI (press Enter when done)', frame)
+    cv.imshow('Choose frame (press Enter)', frame)
 
     # Break the loop when 'Enter' key is pressed
     if cv.waitKey(1) == 13:
