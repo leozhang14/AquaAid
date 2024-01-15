@@ -1,5 +1,5 @@
 # AquaAid
 
-Python application that uses OpenCV's haarCascades facial detection to track water intake, intermittently reminding users to drink water if duration is extended.
- 
+Python application that tracks a user's hydration levels based on facial detection (OpenCV HaarCascades) from a live video capture (webcam).
+
 __In Progress__
