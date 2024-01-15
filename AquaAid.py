@@ -17,7 +17,7 @@ def identifyShow(frame):
 parser = argparse.ArgumentParser()
 # adding arguments to parser
 parser.add_argument('--face_cascade', help='path to haarcascade database (front of face)', default='data/haarcascade_frontalface_alt.xml')
-parser.add_argument('--camera', help='webcam', type=int, default=0)
+parser.add_argument('--camera', help='webcam (default)', type=int, default=0)
 # Parsing the CLI commands
 args = parser.parse_args()
 pathName = args.face_cascade

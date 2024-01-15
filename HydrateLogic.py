@@ -15,7 +15,7 @@ def detect_color_in_roi(frame, roi_coords, color_to_detect):
     """
     Detects if the specified color is present in the given frame.
     If the color is detected, returns the timestamp; otherwise, returns None.
-    ** Note to change so that it its live, not static.
+    ** Note to change so that it's live, not static.
     """
     # Extract the frame
     a, b, c, d = roi_coords
