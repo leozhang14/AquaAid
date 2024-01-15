@@ -13,7 +13,7 @@ def identifyShow(frame):
     cv.imshow('Webcam - AquaAid - Press Esc to Quit', frame)
     # webcam caption
 
-# Initializing ArgumentParser object for easy shell script calling
+# Initializing ArgumentParser object
 parser = argparse.ArgumentParser()
 # adding arguments to parser
 parser.add_argument('--face_cascade', help='path to haarcascade database (front of face)', default='data/haarcascade_frontalface_alt.xml')
