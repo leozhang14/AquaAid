@@ -13,12 +13,12 @@ def identifyShow(frame):
     cv.imshow('Webcam - AquaAid - Press Esc to Quit', frame)
     # webcam caption
 
-# Initializing ArgumentParser object for CLI
+# Initializing ArgumentParser object for easy shell script calling
 parser = argparse.ArgumentParser()
 # adding arguments to parser
 parser.add_argument('--face_cascade', help='path to haarcascade database (front of face)', default='data/haarcascade_frontalface_alt.xml')
 parser.add_argument('--camera', help='webcam', type=int, default=0)
-# Parsing the CLIs (command-line interfaces)
+# Parsing the CLI commands
 args = parser.parse_args()
 pathName = args.face_cascade
 
