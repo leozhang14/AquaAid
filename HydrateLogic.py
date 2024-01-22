@@ -31,11 +31,13 @@ def detect_color_in_roi(frame, roi_coords, color_to_detect):
 
     return None
 
+tempInitial = 3*10^-2
 
 def hydrate_logic(time_opened):
     # need to add initial parameter, then take difference between timestamps
     # idea:
         # return final - initial (in seconds)
+    diff = len(time_opened) - tempInitial
     # Example: return the length of the timestamp string - to be refactored
     return len(time_opened)
 
