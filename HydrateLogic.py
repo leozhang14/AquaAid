@@ -104,7 +104,7 @@ while True:
     # Perform additional logic when the color is first detected
     if time_color_detected:
         value_to_add = hydrate_logic(time_color_detected)
-        if cv.waitKey(1) & 0xFF == ord('s'):
+        while cv.waitKey(1) & 0xFF == ord('s'):
             #edit so that it records interval pressed down
             running_total += int(value_to_add) * timeToVol
             print(f"Running Total: {running_total}")
