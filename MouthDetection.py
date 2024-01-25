@@ -1,31 +1,31 @@
-# Live feed capture template-base
-#Outdated
+#based on former AquaAid.py
+
 import argparse, cv2 as cv, time
 def identifyShow(frame):
     frameSet = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     frameSet = cv.equalizeHist(frameSet)
     # frameSet converts to grayscale for haarcascade to work
-    faces = faceCascade.detectMultiScale(frameSet)
+    faces = mouthCascade.detectMultiScale(frameSet)
     for (a,b,c,d) in faces:
         # building the border of the face (detected)
         centre = (a + c//2, b + d//2)
         frame = cv.ellipse(frame, centre, (c//2, d//2), 0, 0, 360, (255, 100, 50), 4)
-    cv.imshow('Webcam - AquaAid - Press Esc to Quit', frame)
+    cv.imshow('Webcam - AquaAid - Mouth - Press Esc to Quit', frame)
     # webcam caption
 
 # Initializing ArgumentParser object
 parser = argparse.ArgumentParser()
 # adding arguments to parser
-parser.add_argument('--face_cascade', help='path to haarcascade database (front of face)', default='data/haarcascade_frontalface_alt.xml')
+parser.add_argument('--mouth_cascade', help='path to haarcascade database (mouth)', default='data/haarcascade_mcs_mouth.xml')
 parser.add_argument('--camera', help='webcam', type=int, default=0)
 # Parsing the CLI commands
 args = parser.parse_args()
-pathName = args.face_cascade
+pathName = args.mouth_cascade
 
 # creating instance of CascadeClassifier in cv module
-faceCascade = cv.CascadeClassifier()
+mouthCascade = cv.CascadeClassifier()
 
-if not faceCascade.load(cv.samples.findFile(cv.data.haarcascades + 'haarcascade_frontalface_default.xml')):
+if not mouthCascade.load(cv.samples.findFile(cv.data.haarcascades + 'haarcascade_mcs_mouth.xml')):
     exit(0)
 cameraIdx = args.camera
 vidCapture = cv.VideoCapture(cameraIdx)
