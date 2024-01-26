@@ -33,13 +33,14 @@ def detect_color_in_roi(frame, roi_coords, color_to_detect):
 
 tempInitial = 3*10^-2
 
-def hydrate_logic(time_opened):
-    # need to add initial parameter, then take difference between timestamps
-    # idea:
-        # return final - initial (in seconds)
-    diff = len(time_opened) - tempInitial
-    # Example: return the length of the timestamp string - to be refactored
-    return len(time_opened)
+def hydrate_logic(initialTime, finTime):
+    def timeConvert(stamp):
+        return (int(stamp[11]) * 10 * 60 * 60 + int(stamp[12]) * 60 * 60 + int(stamp[14]) * 10 * 60 + int(stamp[15]) * 60
+                + int(stamp[17]) * 10 + int(stamp[18]))
+    final = timeConvert(finTime)
+    initial = timeConvert(initialTime)
+    diff = final - initial
+    return diff
 
 def enterFrame():
     while True:
@@ -76,14 +77,19 @@ a, b, c, d = map(int, roi_coords)
 if cv.waitKey(1) == ord("c"):
     enterFrame()
 # Define the color to detect (in BGR format)
-color_to_detect = (255, 0, 0)
+color_to_detect = (0, 0, 0)
 
 # Initialize variables
 time_color_detected = None
+value_to_add = 0
 running_total = 0
 # Time duration to volume conversion factor (seconds to milliliters, for example)
-timeToVol = 0.1
-# Currently placeholder
+timeToVol = 1.265/500
+# multiplier derived from human trials
+
+#Temp
+#beginTime = time.time()
+#interval = 3  # Print interval in seconds
 
 # Main loop for color detection
 while True:
@@ -98,22 +104,34 @@ while True:
         time_color_detected = current_time
 
     # Display the frame with the selected ROI
-    cv.rectangle(frame, (a, b), (c, d), (0, 0, 255), 2)  # Draw rectangle around ROI
+    cv.rectangle(frame, (a, b), (c, d), (0, 0, 255), 3)  # Draw rectangle around ROI
     cv.imshow('Color Detection - Esc to Quit', frame)
 
     # Perform additional logic when the color is first detected
     if time_color_detected:
-        value_to_add = hydrate_logic(time_color_detected)
-        while cv.waitKey(1) & 0xFF == ord('s'):
-            #edit so that it records interval pressed down
+        width = float(b) - float(a)
+        length = float(d) - float(c)
+        area = width * length / 1000
+        while cv.waitKey(100) & 0xFF == ord('d'):
+            value_to_add = int(hydrate_logic(time_color_detected, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) * area)
             running_total += int(value_to_add) * timeToVol
-            print(f"Running Total: {running_total}")
-        time_color_detected = None  # Reset to None to avoid repeated triggering
+            print(f"Running Total: {running_total} ml")
 
-    # Break the loop when 'esc' key is pressed
-    stopCheck = cv.waitKey(10) & 0xff
+        """""
+        This block of code is testing to make the running total print every 3 seconds.
+        myTime = time.time()
+        #Check if 5 seconds have passed since the last print
+        if myTime - beginTime >= interval:
+            print(f"Running Total: {running_total} ml")
+            beginTime = myTime  # Update the start time
+        time_color_detected = None  # Reset to None to avoid repeated triggering
+        """
+
+
+    stopCheck = cv.waitKey(1) & 0xff
     if stopCheck == 27:
         break
+    # Break the loop when 'esc' key is pressed
 
 # Release the VideoCapture and close all windows
 cap.release()
