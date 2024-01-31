@@ -83,11 +83,11 @@ color_to_detect = (0, 0, 0)
 time_color_detected = None
 value_to_add = 0
 running_total = 0
-# Time duration to volume conversion factor (seconds to milliliters, for example)
+# Time duration to volume conversion factor (seconds to milliliters)
 timeToVol = 1.265/500
 # multiplier derived from human trials
 
-#Temp
+#Temp - info for printing intervals, i.e. how often should the volume consumed be displayed to the user
 #beginTime = time.time()
 #interval = 3  # Print interval in seconds
 

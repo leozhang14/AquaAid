@@ -1,13 +1,13 @@
-#based on former AquaAid.py
+#based on AquaAid.py
 
 import argparse, cv2 as cv, time
 def identifyShow(frame):
     frameSet = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     frameSet = cv.equalizeHist(frameSet)
     # frameSet converts to grayscale for haarcascade to work
-    faces = mouthCascade.detectMultiScale(frameSet)
-    for (a,b,c,d) in faces:
-        # building the border of the face (detected)
+    mouths = mouthCascade.detectMultiScale(frameSet)
+    for (a,b,c,d) in mouths:
+        # building the border of the mouth (detected)
         centre = (a + c//2, b + d//2)
         frame = cv.ellipse(frame, centre, (c//2, d//2), 0, 0, 360, (255, 100, 50), 4)
     cv.imshow('Webcam - AquaAid - Mouth - Press Esc to Quit', frame)
