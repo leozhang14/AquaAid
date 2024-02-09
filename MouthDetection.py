@@ -4,7 +4,7 @@ import argparse, cv2 as cv, time
 def identifyShow(frame):
     frameSet = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     frameSet = cv.equalizeHist(frameSet)
-    # frameSet converts to grayscale for haarcascade to work
+    # frameSet converts to grayscale for haar cascade to work
     mouths = mouthCascade.detectMultiScale(frameSet)
     for (a,b,c,d) in mouths:
         # building the border of the mouth (detected)
