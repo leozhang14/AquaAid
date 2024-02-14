@@ -89,7 +89,7 @@ timeToVol = 1.265/500
 
 #Temp - info for printing intervals, i.e. how often should the volume consumed be displayed to the user
 #beginTime = time.time()
-#interval = 3  # Print interval in seconds
+#interval = 4  # Print interval in seconds
 
 # Main loop for color detection
 while True:
