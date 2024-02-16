@@ -76,7 +76,7 @@ a, b, c, d = map(int, roi_coords)
 
 if cv.waitKey(1) == ord("c"):
     enterFrame()
-# Define the color to detect (in BGR format)
+# Define the color to detect (in BGR format) - based on user input later
 color_to_detect = (0, 0, 0)
 
 # Initialize variables
