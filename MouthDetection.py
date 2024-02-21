@@ -1,4 +1,4 @@
-#based on AquaAid.py
+# Mouth Trainer - TBC
 
 import argparse, cv2 as cv, time
 def identifyShow(frame):

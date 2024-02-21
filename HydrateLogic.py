@@ -1,17 +1,17 @@
-# To be implemented:
-
-import time
-#isDrinking = True
-    #if isDrinking == True:
-        #print("--- %s seconds ---" % round((time.time() - start_time), 3))
-    #else:
-        #start_time = time.time()
-
-# Refactor functions and reorganize for more efficient processing
+# Main
 
 import cv2 as cv
 import datetime
-# from AquaAid import identifyShow
+import argparse
+import sys
+
+# global variables
+time_color_detected = None
+value_to_add = 0
+running_total = 0
+# Time duration to volume conversion factor (seconds to milliliters)
+timeToVol = 1.265/500
+# multiplier derived from human trials
 
 def detect_color_in_roi(frame, roi_coords, color_to_detect):
     """
@@ -31,8 +31,6 @@ def detect_color_in_roi(frame, roi_coords, color_to_detect):
 
     return None
 
-tempInitial = 3*10^-2
-
 def hydrate_logic(initialTime, finTime):
     def timeConvert(stamp):
         return (int(stamp[11]) * 10 * 60 * 60 + int(stamp[12]) * 60 * 60 + int(stamp[14]) * 10 * 60 + int(stamp[15]) * 60
@@ -41,6 +39,9 @@ def hydrate_logic(initialTime, finTime):
     initial = timeConvert(initialTime)
     diff = final - initial
     return diff
+
+def outputPrint(total, stream):
+    print(total, file=stream)
 
 def enterFrame():
     while True:
@@ -55,9 +56,18 @@ def enterFrame():
             break
         ### *** Make it reset to initial frame selection
 
+
+# command line argument for output stream
+parser = argparse.ArgumentParser(description='Process some data and write output to a file.')
+parser.add_argument('--output', '-o', type=str,
+                    help='Output file path. If not provided, the output will be printed to the console.')
+
+args = parser.parse_args()
+
+# Main Process
+
 # Create a VideoCapture object (0 for webcam)
 cap = cv.VideoCapture(0)
-
 while True:
     # Capture video frame-by-frame
     ret, frame = cap.read()
@@ -68,7 +78,6 @@ while True:
     # Break the loop when 'Enter' key is pressed
     if cv.waitKey(1) == 13:
         break
-
 # Destroy the window and get the selected area's coordinates (4 values)
 cv.destroyAllWindows()
 roi_coords = cv.selectROI(frame)
@@ -77,19 +86,7 @@ a, b, c, d = map(int, roi_coords)
 if cv.waitKey(1) == ord("c"):
     enterFrame()
 # Define the color to detect (in BGR format) - based on user input later
-color_to_detect = (0, 0, 0)
-
-# Initialize variables
-time_color_detected = None
-value_to_add = 0
-running_total = 0
-# Time duration to volume conversion factor (seconds to milliliters)
-timeToVol = 1.265/500
-# multiplier derived from human trials
-
-#Temp - info for printing intervals, i.e. how often should the volume consumed be displayed to the user
-#beginTime = time.time()
-#interval = 4  # Print interval in seconds
+color_to_detect = (255, 0, 0)
 
 # Main loop for color detection
 while True:
@@ -113,20 +110,28 @@ while True:
         length = float(d) - float(c)
         area = width * length / 1000
         while cv.waitKey(100) & 0xFF == ord('d'):
+            # hold the d key down to produce output - waitKey() to optimize output intervals (how often to display hydration levels)
             value_to_add = int(hydrate_logic(time_color_detected, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) * area)
             running_total += int(value_to_add) * timeToVol
-            print(f"Running Total: {running_total} ml")
+            # Command line argument can be passed to HydrateLogic.py for user to select output file
+            if args.output:
+                with open(args.output, 'w') as output_file:
+                    outputPrint(f"Running Total: {running_total} ml", output_file)
+            else:
+                outputPrint(f"Running Total: {running_total} ml", sys.stdout)
 
-        """""
-        This block of code is testing to make the running total print every 3 seconds.
+        """"
+        
+        This is an optional block of code for developer testing to optimize running total (for different devices, water bottles, etc.)
+        
         myTime = time.time()
         #Check if 5 seconds have passed since the last print
         if myTime - beginTime >= interval:
             print(f"Running Total: {running_total} ml")
             beginTime = myTime  # Update the start time
         time_color_detected = None  # Reset to None to avoid repeated triggering
+        
         """
-
 
     stopCheck = cv.waitKey(1) & 0xff
     if stopCheck == 27:
