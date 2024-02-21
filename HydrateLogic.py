@@ -58,16 +58,32 @@ def enterFrame():
 
 
 # command line argument for output stream
-parser = argparse.ArgumentParser(description='Process some data and write output to a file.')
-parser.add_argument('--output', '-o', type=str,
+output_parser = argparse.ArgumentParser(description='Process some data and write output to a file.')
+output_parser.add_argument('--output', '-o', type=str,
                     help='Output file path. If not provided, the output will be printed to the console.')
 
-args = parser.parse_args()
+output_args = output_parser.parse_args()
 
 # Main Process
 
+# Initializing ArgumentParser object
+face_parser = argparse.ArgumentParser()
+# adding arguments to parser
+face_parser.add_argument('--face_cascade', help='path to haarcascade database (front of face)', default='data/haarcascade_frontalface_alt.xml')
+face_parser.add_argument('--camera', help='webcam', type=int, default=0)
+# Parsing the CLI commands
+face_args = face_parser.parse_args()
+pathName = face_args.face_cascade
+
+# creating instance of CascadeClassifier in cv module
+faceCascade = cv.CascadeClassifier()
+
+if not faceCascade.load(cv.samples.findFile(cv.data.haarcascades + 'haarcascade_frontalface_default.xml')):
+    exit(0)
+cameraIdx = face_args.camera
 # Create a VideoCapture object (0 for webcam)
-cap = cv.VideoCapture(0)
+cap = cv.VideoCapture(cameraIdx)
+
 while True:
     # Capture video frame-by-frame
     ret, frame = cap.read()
@@ -110,15 +126,20 @@ while True:
         length = float(d) - float(c)
         area = width * length / 1000
         while cv.waitKey(100) & 0xFF == ord('d'):
+
             # hold the d key down to produce output - waitKey() to optimize output intervals (how often to display hydration levels)
             value_to_add = int(hydrate_logic(time_color_detected, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) * area)
             running_total += int(value_to_add) * timeToVol
-            # Command line argument can be passed to HydrateLogic.py for user to select output file
-            if args.output:
-                with open(args.output, 'w') as output_file:
+
+            # Command line argument can be passed to HydrateLogic.py for user to select output filed
+            if output_args.output:
+                with open(output_args.output, 'w') as output_file:
                     outputPrint(f"Running Total: {running_total} ml", output_file)
             else:
                 outputPrint(f"Running Total: {running_total} ml", sys.stdout)
+
+            # for IDE testing - such as PyCharm
+            print(f"Running Total: {running_total} ml")
 
         """"
         
@@ -133,10 +154,10 @@ while True:
         
         """
 
-    stopCheck = cv.waitKey(1) & 0xff
-    if stopCheck == 27:
-        break
-    # Break the loop when 'esc' key is pressed
+        # Break the loop when 'esc' key is pressed
+        stopCheck = cv.waitKey(1) & 0xff
+        if stopCheck == 27:
+            break
 
 # Release the VideoCapture and close all windows
 cap.release()
