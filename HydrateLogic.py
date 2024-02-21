@@ -60,7 +60,7 @@ def enterFrame():
 # command line argument for output stream
 output_parser = argparse.ArgumentParser(description='Process some data and write output to a file.')
 output_parser.add_argument('--output', '-o', type=str,
-                    help='Output file path. If not provided, the output will be printed to the console.')
+                    help='Output file path. If not provided, the output will be printed to the console (default stdout).')
 
 output_args = output_parser.parse_args()
 
