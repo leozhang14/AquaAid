@@ -64,9 +64,7 @@ output_parser.add_argument('--output', '-o', type=str,
 
 output_args = output_parser.parse_args()
 
-# Main Process
-
-# Initializing ArgumentParser object
+# command line arguments for cascade classifier file path and live video input stream
 face_parser = argparse.ArgumentParser()
 # adding arguments to parser
 face_parser.add_argument('--face_cascade', help='path to haarcascade database (front of face)', default='data/haarcascade_frontalface_alt.xml')
@@ -77,6 +75,8 @@ pathName = face_args.face_cascade
 
 # creating instance of CascadeClassifier in cv module
 faceCascade = cv.CascadeClassifier()
+
+# Main Process
 
 if not faceCascade.load(cv.samples.findFile(cv.data.haarcascades + 'haarcascade_frontalface_default.xml')):
     exit(0)
