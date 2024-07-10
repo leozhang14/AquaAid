@@ -73,7 +73,7 @@ face_parser.add_argument('--camera', help='webcam', type=int, default=0)
 face_args = face_parser.parse_args()
 pathName = face_args.face_cascade
 
-# creating instance of CascadeClassifier in cv module
+# creating instance of CascadeClassifier in cv module (for local use)
 faceCascade = cv.CascadeClassifier()
 
 # Main Process
